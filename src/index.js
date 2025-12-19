@@ -1,22 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 
-// Suppress React Router warnings (optional)
-if (process.env.NODE_ENV !== 'production') {
-    const originalWarn = console.warn;
-    console.warn = function (...args) {
-        if (args[0] && typeof args[0] === 'string' && args[0].includes('React Router Future Flag')) {
-            return;
-        }
-        originalWarn.apply(console, args);
-    };
-}
+// Import the debug test
+import './test-firebase-debug.js';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
-);
+// Delay React render to see Firebase errors first
+setTimeout(() => {
+    import('./App').then(({ default: App }) => {
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <React.StrictMode>
+                <App />
+            </React.StrictMode>
+        );
+    });
+}, 1000);
