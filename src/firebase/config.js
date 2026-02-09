@@ -1,9 +1,7 @@
-// CORRECT Firebase v10+ modular syntax
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Your Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
@@ -13,28 +11,9 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 
-console.log("🔥 Firebase Config:", {
-  projectId: firebaseConfig.projectId,
-  authDomain: firebaseConfig.authDomain,
-  apiKeyLength: firebaseConfig.apiKey.length,
-});
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Firebase
-let app;
-try {
-  app = initializeApp(firebaseConfig);
-  console.log("✅ Firebase initialized successfully");
-  console.log("App name:", app.name);
-} catch (error) {
-  console.error("❌ Firebase initialization error:", error);
-  throw error;
-}
+console.log("✅ Firebase App Name:", app.name);
 
-// Get Firebase services
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-console.log("✅ Auth service loaded:", !!auth);
-console.log("✅ Firestore service loaded:", !!db);
-
-export { auth, db };
+export const auth = getAuth(app);
+export const db = getFirestore(app);
